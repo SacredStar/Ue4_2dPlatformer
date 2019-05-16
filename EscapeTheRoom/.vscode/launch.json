@@ -1,0 +1,128 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "EscapeTheRoom (Debug)",
+			"request": "launch",
+			"preLaunchTask": "EscapeTheRoom Win64 Debug Build",
+			"program": "E:\\Game_dev\\Projects\\Learn\\CPPLearn\\EscapeTheRoom\\Binaries\\Win64\\EscapeTheRoom-Win64-Debug.exe",
+			"args": [
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "EscapeTheRoom (DebugGame)",
+			"request": "launch",
+			"preLaunchTask": "EscapeTheRoom Win64 DebugGame Build",
+			"program": "E:\\Game_dev\\Projects\\Learn\\CPPLearn\\EscapeTheRoom\\Binaries\\Win64\\EscapeTheRoom-Win64-DebugGame.exe",
+			"args": [
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "EscapeTheRoom (Development)",
+			"request": "launch",
+			"preLaunchTask": "EscapeTheRoom Win64 Development Build",
+			"program": "E:\\Game_dev\\Projects\\Learn\\CPPLearn\\EscapeTheRoom\\Binaries\\Win64\\EscapeTheRoom.exe",
+			"args": [
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "EscapeTheRoom (Shipping)",
+			"request": "launch",
+			"preLaunchTask": "EscapeTheRoom Win64 Shipping Build",
+			"program": "E:\\Game_dev\\Projects\\Learn\\CPPLearn\\EscapeTheRoom\\Binaries\\Win64\\EscapeTheRoom-Win64-Shipping.exe",
+			"args": [
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "EscapeTheRoom (Test)",
+			"request": "launch",
+			"preLaunchTask": "EscapeTheRoom Win64 Test Build",
+			"program": "E:\\Game_dev\\Projects\\Learn\\CPPLearn\\EscapeTheRoom\\Binaries\\Win64\\EscapeTheRoom-Win64-Test.exe",
+			"args": [
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "EscapeTheRoomEditor (Debug)",
+			"request": "launch",
+			"preLaunchTask": "EscapeTheRoomEditor Win64 Debug Build",
+			"program": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Binaries\\Win64\\UE4Editor-Win64-Debug.exe",
+			"args": [
+				"E:\\Game_dev\\Projects\\Learn\\CPPLearn\\EscapeTheRoom\\EscapeTheRoom.uproject"
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "EscapeTheRoomEditor (DebugGame)",
+			"request": "launch",
+			"preLaunchTask": "EscapeTheRoomEditor Win64 DebugGame Build",
+			"program": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Binaries\\Win64\\UE4Editor.exe",
+			"args": [
+				"E:\\Game_dev\\Projects\\Learn\\CPPLearn\\EscapeTheRoom\\EscapeTheRoom.uproject"
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "EscapeTheRoomEditor (Development)",
+			"request": "launch",
+			"preLaunchTask": "EscapeTheRoomEditor Win64 Development Build",
+			"program": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Binaries\\Win64\\UE4Editor.exe",
+			"args": [
+				"E:\\Game_dev\\Projects\\Learn\\CPPLearn\\EscapeTheRoom\\EscapeTheRoom.uproject"
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "Generate Project Files",
+			"type": "clr",
+			"request": "launch",
+			"program": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Binaries\\DotNET\\UnrealBuildTool.exe",
+			"console": "externalTerminal",
+			"args": [
+				"-projectfiles",
+				"-vscode",
+				"-project=\"E:\\Game_dev\\Projects\\Learn\\CPPLearn\\EscapeTheRoom\\EscapeTheRoom.uproject\"",
+				"-game",
+				"-engine"
+			],
+			"internalConsoleOptions": "openOnSessionStart",
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22"
+		}
+	]
+}
