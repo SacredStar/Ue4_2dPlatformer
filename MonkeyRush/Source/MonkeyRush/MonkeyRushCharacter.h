@@ -56,14 +56,16 @@ class AMonkeyRushCharacter : public APaperCharacter
 	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 	bool Attacking = false;
 
-	/* Handle to manage the timer */
-	FTimerHandle AttackTimerHandle;
-
 	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 	bool SpellCasting = false;
 
 	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 	bool isJumping = false;
+
+	/* Handle to manage the timer */
+	FTimerHandle AttackTimerHandle;
+
+	FTimerHandle CastSpellTimerHandle;
 
 	//Smth unknown
 	UTextRenderComponent* TextComponent;
@@ -110,12 +112,14 @@ public:
 
 	//Fuction for Enable Movement + Set Attacking to False
 	UFUNCTION()
-	void F_Attack();
-
-	/** Called Functions for Actions */
-	UFUNCTION()
 	void setAttackingFalse ();
+	
+	/** Called Functions for Actions */
 
+	//Fuction for Start Attack if no Cast spell/Attack +  no Falling down, alse Disable Movement
+	UFUNCTION()
+	void F_Attack();
+	
 	UFUNCTION()
 	void F_CastSpell ();
 
