@@ -185,15 +185,14 @@ void AMonkeyRushCharacter::UpdateCharacter()
 	}
 }
 
-//TODO TO FIX THIS SHIT
+//FIxed: 
 void AMonkeyRushCharacter::F_Attack()
 {
-
 	if(SpellCasting == false && Attacking == false && AMonkeyRushCharacter::GetMovementComponent()->IsFalling() == false)
 	{
 		Attacking = true;	
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
-		//TODO TIMER
+		//TODO TIMER  - Fixed
 		GetCharacterMovement()->DisableMovement();
 		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,this,&AMonkeyRushCharacter::setAttackingFalse,0.6f,false);
 		UE_LOG(LogTemp, Warning, TEXT("Atacking Function Reporting!"));
@@ -209,5 +208,19 @@ void AMonkeyRushCharacter::setAttackingFalse()
 
 void AMonkeyRushCharacter::F_CastSpell()
 {
+	if(SpellCasting == false && Attacking == false && AMonkeyRushCharacter::GetMovementComponent()->IsFalling() == false)
+	{
+		SpellCasting = true;
+		GetWorld()->GetTimerManager().ClearTimer(CastSpellTimerHandle);
+		GetCharacterMovement()->DisableMovement();
+		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,this,&AMonkeyRushCharacter::setSpellCastingFalse,0.6f,false);
+	}
 	UE_LOG(LogTemp, Warning, TEXT("Cast Spelling Function Reporting!"));
+}
+
+void AMonkeyRushCharacter::setSpellCastingFalse()
+{
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	UE_LOG(LogTemp, Warning, TEXT("SpellCasting Set to False!"));
+	SpellCasting = false;
 }

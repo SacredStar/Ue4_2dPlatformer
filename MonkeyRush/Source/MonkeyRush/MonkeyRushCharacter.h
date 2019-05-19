@@ -113,6 +113,9 @@ public:
 	//Fuction for Enable Movement + Set Attacking to False
 	UFUNCTION()
 	void setAttackingFalse ();
+	//Function for Enable Movement+ Set SpellCast to False
+	UFUNCTION()
+	void setSpellCastingFalse ();
 	
 	/** Called Functions for Actions */
 
