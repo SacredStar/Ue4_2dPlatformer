@@ -101,9 +101,6 @@ protected:
 
 	void UpdateCharacter();
 
-	
-	
-
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End of APawn interface
@@ -111,6 +108,7 @@ protected:
 public:
 	AMonkeyRushCharacter();
 
+	//Fuction for Enable Movement + Set Attacking to False
 	UFUNCTION()
 	void F_Attack();
 
