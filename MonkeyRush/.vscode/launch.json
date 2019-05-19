@@ -1,0 +1,128 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "MonkeyRush (Debug)",
+			"request": "launch",
+			"preLaunchTask": "MonkeyRush Win64 Debug Build",
+			"program": "E:\\Game_dev\\Projects\\Learn\\CPPLearn\\MonkeyRush\\Binaries\\Win64\\MonkeyRush-Win64-Debug.exe",
+			"args": [
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "MonkeyRush (DebugGame)",
+			"request": "launch",
+			"preLaunchTask": "MonkeyRush Win64 DebugGame Build",
+			"program": "E:\\Game_dev\\Projects\\Learn\\CPPLearn\\MonkeyRush\\Binaries\\Win64\\MonkeyRush-Win64-DebugGame.exe",
+			"args": [
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "MonkeyRush (Development)",
+			"request": "launch",
+			"preLaunchTask": "MonkeyRush Win64 Development Build",
+			"program": "E:\\Game_dev\\Projects\\Learn\\CPPLearn\\MonkeyRush\\Binaries\\Win64\\MonkeyRush.exe",
+			"args": [
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "MonkeyRush (Shipping)",
+			"request": "launch",
+			"preLaunchTask": "MonkeyRush Win64 Shipping Build",
+			"program": "E:\\Game_dev\\Projects\\Learn\\CPPLearn\\MonkeyRush\\Binaries\\Win64\\MonkeyRush-Win64-Shipping.exe",
+			"args": [
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "MonkeyRush (Test)",
+			"request": "launch",
+			"preLaunchTask": "MonkeyRush Win64 Test Build",
+			"program": "E:\\Game_dev\\Projects\\Learn\\CPPLearn\\MonkeyRush\\Binaries\\Win64\\MonkeyRush-Win64-Test.exe",
+			"args": [
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "MonkeyRushEditor (Debug)",
+			"request": "launch",
+			"preLaunchTask": "MonkeyRushEditor Win64 Debug Build",
+			"program": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Binaries\\Win64\\UE4Editor-Win64-Debug.exe",
+			"args": [
+				"E:\\Game_dev\\Projects\\Learn\\CPPLearn\\MonkeyRush\\MonkeyRush.uproject"
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "MonkeyRushEditor (DebugGame)",
+			"request": "launch",
+			"preLaunchTask": "MonkeyRushEditor Win64 DebugGame Build",
+			"program": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Binaries\\Win64\\UE4Editor.exe",
+			"args": [
+				"E:\\Game_dev\\Projects\\Learn\\CPPLearn\\MonkeyRush\\MonkeyRush.uproject"
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "MonkeyRushEditor (Development)",
+			"request": "launch",
+			"preLaunchTask": "MonkeyRushEditor Win64 Development Build",
+			"program": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Binaries\\Win64\\UE4Editor.exe",
+			"args": [
+				"E:\\Game_dev\\Projects\\Learn\\CPPLearn\\MonkeyRush\\MonkeyRush.uproject"
+			],
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "Generate Project Files",
+			"type": "clr",
+			"request": "launch",
+			"program": "E:\\Game_dev\\UE_4.22\\UE_4.22\\Engine\\Binaries\\DotNET\\UnrealBuildTool.exe",
+			"console": "externalTerminal",
+			"args": [
+				"-projectfiles",
+				"-vscode",
+				"-project=\"E:\\Game_dev\\Projects\\Learn\\CPPLearn\\MonkeyRush\\MonkeyRush.uproject\"",
+				"-game",
+				"-engine"
+			],
+			"internalConsoleOptions": "openOnSessionStart",
+			"cwd": "E:\\Game_dev\\UE_4.22\\UE_4.22"
+		}
+	]
+}
