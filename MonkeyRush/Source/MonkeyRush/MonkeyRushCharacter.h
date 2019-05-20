@@ -133,6 +133,8 @@ public:
 	void setSpellCastingFalse ();
 	
 	/** Called Functions for Actions */
+	UFUNCTION()
+	void F_Slide();
 
 	//Fuction for Start Attack if no Cast spell/Attack +  no Falling down, alse Disable Movement
 	UFUNCTION()

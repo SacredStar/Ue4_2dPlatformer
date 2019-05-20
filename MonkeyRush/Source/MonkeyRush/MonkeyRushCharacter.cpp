@@ -153,6 +153,7 @@ void AMonkeyRushCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, this, &AMonkeyRushCharacter::F_Attack);
 	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, this, &AMonkeyRushCharacter::F_CastSpell);
+	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::F_Slide);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMonkeyRushCharacter::MoveRight);
 
@@ -240,4 +241,9 @@ void AMonkeyRushCharacter::setSpellCastingFalse()
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	UE_LOG(LogTemp, Warning, TEXT("SpellCasting Set to False!"));
 	SpellCasting = false;
+}
+//TODO
+void AMonkeyRushCharacter::F_Slide()
+{
+	GetCharacterMovement()->AddImpulse(FVector(4000.f,0.f,0.f),true);
 }
