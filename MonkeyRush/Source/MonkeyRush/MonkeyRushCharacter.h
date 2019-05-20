@@ -24,6 +24,9 @@ class AMonkeyRushCharacter : public APaperCharacter
 {
 	GENERATED_BODY()
 
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay, meta=(AllowPrivateAccess="true"))
+	//class UArrowComponent* arrow1;
+
 	/** Side view camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, meta=(AllowPrivateAccess="true"))
 	class UCameraComponent* SideViewCameraComponent;
@@ -73,6 +76,17 @@ class AMonkeyRushCharacter : public APaperCharacter
 
 protected:
 
+	/*              // For Fire Spell's and Attack's     */
+	// Location From where start to Fire
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FVector SpellCastOffset;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FTransform SpellCastTransform;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FRotator SpellCastRotator;
+	
 	/*             //Animations //  */
 	// The animation to play while running around
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
@@ -113,6 +127,7 @@ public:
 	//Fuction for Enable Movement + Set Attacking to False
 	UFUNCTION()
 	void setAttackingFalse ();
+
 	//Function for Enable Movement+ Set SpellCast to False
 	UFUNCTION()
 	void setSpellCastingFalse ();
@@ -131,4 +146,8 @@ public:
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+
+	// Projectile class to spawn.
+    UPROPERTY(EditDefaultsOnly, Category = Projectile)
+    TSubclassOf<class AFireBall> FireBallClass;
 };

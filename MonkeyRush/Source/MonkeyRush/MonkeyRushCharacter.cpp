@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "Camera/CameraComponent.h"
+#include "FireBall.h"
 
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
@@ -34,6 +35,9 @@ AMonkeyRushCharacter::AMonkeyRushCharacter()
 	CameraBoom->bAbsoluteRotation = true;
 	CameraBoom->bDoCollisionTest = false;
 	CameraBoom->RelativeRotation = FRotator(0.0f, -90.0f, 0.0f);
+
+	//arrow1 = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
+	//arrow1->SetupAttachment(RootComponent);
 	
 
 	// Create an orthographic camera (no perspective) and attach it to the boom
@@ -213,8 +217,21 @@ void AMonkeyRushCharacter::F_CastSpell()
 		SpellCasting = true;
 		GetWorld()->GetTimerManager().ClearTimer(CastSpellTimerHandle);
 		GetCharacterMovement()->DisableMovement();
-		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,this,&AMonkeyRushCharacter::setSpellCastingFalse,0.6f,false);
-	}
+		
+		//TODO SpellCastOffset not to spawn into the Character
+		FVector SpellCastOffset = GetActorLocation();
+		FRotator SpellCastRotator = GetActorRotation(); 
+		
+		//Spawn Parameters
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.Owner = this;
+		SpawnParameters.Instigator = Instigator;
+
+		//Creating a FireBall
+		AFireBall* FireBall = GetWorld()->SpawnActor<AFireBall>(FireBallClass,SpellCastOffset,SpellCastRotator,SpawnParameters);
+        // Set Delay and SpellCasting To False		
+		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,this,&AMonkeyRushCharacter::setSpellCastingFalse,0.6f,false);	 
+	 }
 	UE_LOG(LogTemp, Warning, TEXT("Cast Spelling Function Reporting!"));
 }
 
