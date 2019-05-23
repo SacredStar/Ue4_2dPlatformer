@@ -28,9 +28,6 @@ class AMonkeyRushCharacter : public APaperCharacter
 	class UCameraComponent* SideViewCameraComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta=(AllowPrivateAccess="true"))
-	class UActionSystemComponent* ActionSystemComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta=(AllowPrivateAccess="true"))
 	class UAbilitySystemComponent* AbilitySystemComponent;
 
 	/** Camera boom positioning the camera beside the character */
@@ -101,5 +98,7 @@ public:
 	void attack();
 
 	void castspell();
+
+	void slide();
 
 };

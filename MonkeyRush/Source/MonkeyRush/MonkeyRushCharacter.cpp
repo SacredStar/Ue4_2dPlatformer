@@ -10,7 +10,6 @@
 #include "GameFramework/Controller.h"
 #include "Camera/CameraComponent.h"
 #include "AbilitySystemComponent.h"
-#include "ActionSystemComponent.h"
 
 
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
@@ -26,8 +25,6 @@ AMonkeyRushCharacter::AMonkeyRushCharacter()
 	bUseControllerRotationRoll = false;
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
-	ActionSystemComponent = CreateDefaultSubobject<UActionSystemComponent>(TEXT("ActionSystem"));
-
 
 	// Set the size of our collision capsule.
 	GetCapsuleComponent()->SetCapsuleHalfHeight(96.0f);
@@ -143,8 +140,8 @@ void AMonkeyRushCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, ActionSystemComponent,&UActionSystemComponent::Attack);
-	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, ActionSystemComponent, &UActionSystemComponent::Slide);
+	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, AbilitySystemComponent,&UAbilitySystemComponent::Attack);
+	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::slide);
 	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, AbilitySystemComponent, &UAbilitySystemComponent::CastSpell);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMonkeyRushCharacter::MoveRight);
 
@@ -212,7 +209,19 @@ void AMonkeyRushCharacter::attack()
 	{
 		GetCharacterMovement()->DisableMovement();
 		bAttacking = true;
-		ActionSystemComponent->Attack();
+		AbilitySystemComponent->Attack();
 		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,TimerDelegate,0.6f,false);
 	}
+}
+
+void AMonkeyRushCharacter::slide()
+{
+	//FVector Launch_Dir = FVector(4000.f,0.f,0.f);
+	//FHitResult hit;
+	//AMonkeyRushCharacter::SlideAlongSurface(FVector(200.f,0.f,0.f),1.f,FVector(200.f,0.f,0.f),hit,false);
+	/*if(	GetCharacterMovement()-> IsFalling() == true)
+	{
+		GetCharacterMovement()->StopActiveMovement();
+	}*/
+	//GetCharacterMovement()->AddImpulse(FVector(4000.f,0.f,0.f),true);
 }

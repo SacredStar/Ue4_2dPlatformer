@@ -59,6 +59,9 @@ public:
 	UFUNCTION()
 	void CastSpell ();
 
+	UFUNCTION()
+	void Attack();
+
 	// Projectile class to spawn.
     UPROPERTY(EditDefaultsOnly, Category = Projectile)
     TSubclassOf<class AFireBall> FireBallClass;

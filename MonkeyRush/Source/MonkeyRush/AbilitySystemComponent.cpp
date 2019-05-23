@@ -9,6 +9,7 @@ UAbilitySystemComponent::UAbilitySystemComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+	
 	//Setup Stats
 	Intellect = 5;
 	Winsdom = 5;
@@ -16,7 +17,6 @@ UAbilitySystemComponent::UAbilitySystemComponent()
 	Agility = 5;
 	Health = Strengh;
 	Mana = (Intellect * Winsdom);
-	// ...
 }
 
 
@@ -24,9 +24,6 @@ UAbilitySystemComponent::UAbilitySystemComponent()
 void UAbilitySystemComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
 
@@ -34,8 +31,6 @@ void UAbilitySystemComponent::BeginPlay()
 void UAbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 void UAbilitySystemComponent::CastSpell()
@@ -53,10 +48,8 @@ void UAbilitySystemComponent::CastSpell()
 	UE_LOG(LogTemp, Warning, TEXT("Cast Spelling Function Reporting!"));
 }
 
-/*void UAbilitySystemComponent::setSpellCastingFalse()
+void UAbilitySystemComponent::Attack()
 {
-	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-	UE_LOG(LogTemp, Warning, TEXT("SpellCasting Set to False!"));
-	SpellCasting = false;
-}*/
+	//TODO
+}
 
