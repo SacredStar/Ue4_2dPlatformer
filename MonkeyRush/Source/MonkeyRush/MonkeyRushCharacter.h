@@ -38,7 +38,6 @@ class AMonkeyRushCharacter : public APaperCharacter
 
 protected:
 
-	
 	/*             //Animations //  */
 	// The animation to play while running around
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
@@ -90,6 +89,10 @@ public:
 	//Boolean Stats For SpellCast
 		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bSpellCasting = false;
+	//Boolean Stats For movement
+		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+		bool bMovementRight;
+	
 
 
 	/** Returns CameraBoom subobject **/
