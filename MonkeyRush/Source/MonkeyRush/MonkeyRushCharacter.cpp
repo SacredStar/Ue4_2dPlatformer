@@ -126,8 +126,7 @@ void AMonkeyRushCharacter::UpdateAnimation()
 
 void AMonkeyRushCharacter::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaSeconds);
-	
+	Super::Tick(DeltaSeconds);	
 	UpdateCharacter();	
 }
 
@@ -140,9 +139,9 @@ void AMonkeyRushCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, AbilitySystemComponent,&UAbilitySystemComponent::Attack);
+	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, this,&AMonkeyRushCharacter::attack);
 	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::slide);
-	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, AbilitySystemComponent, &UAbilitySystemComponent::CastSpell);
+	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, this, &AMonkeyRushCharacter::castspell);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMonkeyRushCharacter::MoveRight);
 
 }
@@ -169,22 +168,28 @@ void AMonkeyRushCharacter::UpdateCharacter()
 	{
 		if (TravelDirection < 0.0f)
 		{
+			//UE_LOG(LogTemp, Display, TEXT("Left!"));
+			bMovementRight = false;
 			Controller->SetControlRotation(FRotator(0.0, 180.0f, 0.0f));
 		}
 		else if (TravelDirection > 0.0f)
 		{
+			//UE_LOG(LogTemp, Display, TEXT("Right!"));
+			bMovementRight = true;			
 			Controller->SetControlRotation(FRotator(0.0f, 0.0f, 0.0f));
 		}
 	}
 }
-
+//TODO : Fix For Not Spawn In Character
 void AMonkeyRushCharacter::castspell()
 {
 	FTimerDelegate TimerDelegate;
+	//Lambda Function to implementing timer
 	TimerDelegate.BindLambda([&]()
 	{
 		bSpellCasting = false;
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		GetWorld()->GetTimerManager().ClearTimer(CastSpellTimerHandle);
 	});
 
 	if(bSpellCasting == false && GetCharacterMovement()->IsFalling() == false )
@@ -192,30 +197,36 @@ void AMonkeyRushCharacter::castspell()
 		GetCharacterMovement()->DisableMovement();
 		bSpellCasting = true;
 		AbilitySystemComponent->CastSpell();
-		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,TimerDelegate,0.6f,false);
+		//Timer to StopMovement and Animation changes,when fires set movement to normal and bSpellCast to false to continue Animation's
+		GetWorld()->GetTimerManager().SetTimer(CastSpellTimerHandle,TimerDelegate,0.6f,false);		
 	}
 }
 
 void AMonkeyRushCharacter::attack()
 {
 	FTimerDelegate TimerDelegate;
+	//Lambda Function to implemeting timer
 	TimerDelegate.BindLambda([&]()
 	{
 		bAttacking = false;
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
 	});
 
 	if(bAttacking == false && GetCharacterMovement()->IsFalling() == false)
 	{
 		GetCharacterMovement()->DisableMovement();
+		//UE_LOG(LogTemp, Warning, TEXT("bAtacking Set True Reporting!"));
 		bAttacking = true;
 		AbilitySystemComponent->Attack();
-		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,TimerDelegate,0.6f,false);
+		//Timer to Stop Movement and animation changes,when fires set movement to normal and bAttack to false to continue Animation's
+		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,TimerDelegate,0.6f,false);		
 	}
 }
 
 void AMonkeyRushCharacter::slide()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Slide function Reporting!"));
 	//FVector Launch_Dir = FVector(4000.f,0.f,0.f);
 	//FHitResult hit;
 	//AMonkeyRushCharacter::SlideAlongSurface(FVector(200.f,0.f,0.f),1.f,FVector(200.f,0.f,0.f),hit,false);
