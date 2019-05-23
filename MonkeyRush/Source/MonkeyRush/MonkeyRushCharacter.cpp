@@ -2,14 +2,16 @@
 
 #include "MonkeyRushCharacter.h"
 #include "PaperFlipbookComponent.h"
-#include "Components/TextRenderComponent.h"
+//#include "Components/TextRenderComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "Camera/CameraComponent.h"
-#include "FireBall.h"
+#include "AbilitySystemComponent.h"
+#include "ActionSystemComponent.h"
+
 
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
@@ -22,6 +24,10 @@ AMonkeyRushCharacter::AMonkeyRushCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
+
+	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+	ActionSystemComponent = CreateDefaultSubobject<UActionSystemComponent>(TEXT("ActionSystem"));
+
 
 	// Set the size of our collision capsule.
 	GetCapsuleComponent()->SetCapsuleHalfHeight(96.0f);
@@ -68,21 +74,6 @@ AMonkeyRushCharacter::AMonkeyRushCharacter()
 	// Note: This can cause a little floating when going up inclines; you can choose the tradeoff between better
 	// behavior on the edge of a ledge versus inclines by setting this to true or false
 	GetCharacterMovement()->bUseFlatBaseForFloorChecks = true;
-
-    // 	TextComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("IncarGear"));
-    // 	TextComponent->SetRelativeScale3D(FVector(3.0f, 3.0f, 3.0f));
-    // 	TextComponent->SetRelativeLocation(FVector(35.0f, 5.0f, 20.0f));
-    // 	TextComponent->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
-    // 	TextComponent->SetupAttachment(RootComponent);
-
-	//Setup Stats
-	Intellect = 5;
-	Winsdom = 5;
-	Strengh = 5;
-	Agility = 5;
-	Health = Strengh;
-	Mana = (Intellect * Winsdom);
-
 }
 
 
@@ -104,9 +95,9 @@ void AMonkeyRushCharacter::UpdateAnimation()
 		//UE_LOG(LogTemp, Display, TEXT("Jumping Animation Reporting!"));
 	}
 	else {
-			if(Attacking == false)
+			if(bAttacking == false)
 			{
-				if(SpellCasting == false)
+				if(bSpellCasting == false)
 				{
 					if(PlayerSpeedSqr > 0.0f)
 					{
@@ -151,10 +142,10 @@ void AMonkeyRushCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 {
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, this, &AMonkeyRushCharacter::F_Attack);
-	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, this, &AMonkeyRushCharacter::F_CastSpell);
-	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::F_Slide);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, ActionSystemComponent,&UActionSystemComponent::Attack);
+	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, ActionSystemComponent, &UActionSystemComponent::Slide);
+	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, AbilitySystemComponent, &UAbilitySystemComponent::CastSpell);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMonkeyRushCharacter::MoveRight);
 
 }
@@ -190,60 +181,38 @@ void AMonkeyRushCharacter::UpdateCharacter()
 	}
 }
 
-//FIxed: 
-void AMonkeyRushCharacter::F_Attack()
+void AMonkeyRushCharacter::castspell()
 {
-	if(SpellCasting == false && Attacking == false && AMonkeyRushCharacter::GetMovementComponent()->IsFalling() == false)
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindLambda([&]()
 	{
-		Attacking = true;	
-		GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
-		//TODO TIMER  - Fixed
+		bSpellCasting = false;
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	});
+
+	if(bSpellCasting == false && GetCharacterMovement()->IsFalling() == false )
+	{
 		GetCharacterMovement()->DisableMovement();
-		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,this,&AMonkeyRushCharacter::setAttackingFalse,0.6f,false);
-		UE_LOG(LogTemp, Warning, TEXT("Atacking Function Reporting!"));
+		bSpellCasting = true;
+		AbilitySystemComponent->CastSpell();
+		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,TimerDelegate,0.6f,false);
 	}
 }
 
-void AMonkeyRushCharacter::setAttackingFalse()
+void AMonkeyRushCharacter::attack()
 {
-	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-	UE_LOG(LogTemp, Warning, TEXT("Attacking Set to False!"));
-	Attacking = false;
-}
-
-void AMonkeyRushCharacter::F_CastSpell()
-{
-	if(SpellCasting == false && Attacking == false && AMonkeyRushCharacter::GetMovementComponent()->IsFalling() == false)
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindLambda([&]()
 	{
-		SpellCasting = true;
-		GetWorld()->GetTimerManager().ClearTimer(CastSpellTimerHandle);
+		bAttacking = false;
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	});
+
+	if(bAttacking == false && GetCharacterMovement()->IsFalling() == false)
+	{
 		GetCharacterMovement()->DisableMovement();
-		
-		//TODO SpellCastOffset not to spawn into the Character
-		FVector SpellCastOffset = GetActorLocation();
-		FRotator SpellCastRotator = GetActorRotation(); 
-		
-		//Spawn Parameters
-		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.Owner = this;
-		SpawnParameters.Instigator = Instigator;
-
-		//Creating a FireBall
-		AFireBall* FireBall = GetWorld()->SpawnActor<AFireBall>(FireBallClass,SpellCastOffset,SpellCastRotator,SpawnParameters);
-        // Set Delay and SpellCasting To False		
-		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,this,&AMonkeyRushCharacter::setSpellCastingFalse,0.6f,false);	 
-	 }
-	UE_LOG(LogTemp, Warning, TEXT("Cast Spelling Function Reporting!"));
-}
-
-void AMonkeyRushCharacter::setSpellCastingFalse()
-{
-	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-	UE_LOG(LogTemp, Warning, TEXT("SpellCasting Set to False!"));
-	SpellCasting = false;
-}
-//TODO
-void AMonkeyRushCharacter::F_Slide()
-{
-	GetCharacterMovement()->AddImpulse(FVector(4000.f,0.f,0.f),true);
+		bAttacking = true;
+		ActionSystemComponent->Attack();
+		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,TimerDelegate,0.6f,false);
+	}
 }

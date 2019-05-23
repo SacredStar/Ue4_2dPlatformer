@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
-#include "TimerManager.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 #include "MonkeyRushCharacter.generated.h"
 
 
@@ -24,68 +23,24 @@ class AMonkeyRushCharacter : public APaperCharacter
 {
 	GENERATED_BODY()
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay, meta=(AllowPrivateAccess="true"))
-	//class UArrowComponent* arrow1;
-
 	/** Side view camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta=(AllowPrivateAccess="true"))
 	class UCameraComponent* SideViewCameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta=(AllowPrivateAccess="true"))
+	class UActionSystemComponent* ActionSystemComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta=(AllowPrivateAccess="true"))
+	class UAbilitySystemComponent* AbilitySystemComponent;
 
 	/** Camera boom positioning the camera beside the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
-	/** Creating a stats for my character **/
-	UPROPERTY(VisibleAnywhere,Category = Stats)
-	int32 Intellect;
-
-	UPROPERTY(VisibleAnywhere,Category = Stats)
-	int32 Winsdom;
-
-	UPROPERTY(VisibleAnywhere,Category = Stats)
-	int32 Strengh;
-
-	UPROPERTY(VisibleAnywhere,Category = Stats)
-	int32 Agility;
-
-	// Inherited Stats
-	UPROPERTY(VisibleAnywhere,Category = Stats)
-	int32 Health;
-
-	UPROPERTY(VisibleAnywhere,Category = Stats)
-	int32 Mana;
-	
-	//Boolean Stats for Atack,Casting
-	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
-	bool Attacking = false;
-
-	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
-	bool SpellCasting = false;
-
-	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
-	bool isJumping = false;
-
-	/* Handle to manage the timer */
-	FTimerHandle AttackTimerHandle;
-
-	FTimerHandle CastSpellTimerHandle;
-
-	//Smth unknown
-	UTextRenderComponent* TextComponent;
 	virtual void Tick(float DeltaSeconds) override;
 
 protected:
 
-	/*              // For Fire Spell's and Attack's     */
-	// Location From where start to Fire
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SpellCasting)
-	FVector SpellCastOffset;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SpellCasting)
-	FTransform SpellCastTransform;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SpellCasting)
-	FRotator SpellCastRotator;
 	
 	/*             //Animations //  */
 	// The animation to play while running around
@@ -99,7 +54,7 @@ protected:
 	//The animation to play while SpellCast
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* SpellCastAnimation;
-	
+
 	//The Animation to play while Jumping
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* JumpAnimation;
@@ -117,39 +72,34 @@ protected:
 
 	void UpdateCharacter();
 
+	/* Handle to manage the timer */
+	FTimerHandle AttackTimerHandle;
+
+	//Handle To manage CastSpell
+	FTimerHandle CastSpellTimerHandle;
+
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End of APawn interface
 
 public:
 	AMonkeyRushCharacter();
-
-	//Fuction for Enable Movement + Set Attacking to False
-	UFUNCTION()
-	void setAttackingFalse ();
-
-	//Function for Enable Movement+ Set SpellCast to False
-	UFUNCTION()
-	void setSpellCastingFalse ();
-	
-	/** Called Functions for Actions */
-	UFUNCTION()
-	void F_Slide();
-
-	//Fuction for Start Attack if no Cast spell/Attack +  no Falling down, alse Disable Movement
-	UFUNCTION()
-	void F_Attack();
-	
-	UFUNCTION()
-	void F_CastSpell ();
-
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
+
+	//Boolean Stats for Attack
+		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+		bool bAttacking = false;
+	//Boolean Stats For SpellCast
+		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+		bool bSpellCasting = false;
+
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
-	// Projectile class to spawn.
-    UPROPERTY(EditDefaultsOnly, Category = Projectile)
-    TSubclassOf<class AFireBall> FireBallClass;
+	void attack();
+
+	void castspell();
+
 };
