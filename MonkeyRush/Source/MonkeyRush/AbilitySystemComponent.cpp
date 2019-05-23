@@ -35,7 +35,7 @@ void UAbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 void UAbilitySystemComponent::CastSpell()
 {
-	FVector SpellCastOffset = GetOwner()->GetActorLocation();
+	FVector SpellCastOffset = GetOwner()->GetActorLocation() + FVector(10.f,0.f,0.f);
 	FRotator SpellCastRotator = GetOwner()->GetActorRotation(); 
 	
 	//Spawn Parameters
@@ -50,6 +50,7 @@ void UAbilitySystemComponent::CastSpell()
 
 void UAbilitySystemComponent::Attack()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Attack Function Reporting!"));
 	//TODO
 }
 
