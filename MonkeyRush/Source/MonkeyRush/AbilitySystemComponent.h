@@ -37,7 +37,6 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
 	
 	/*     / For  Spell's    */
 	// Location From where start to Fire
@@ -49,9 +48,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SpellCasting)
 	FRotator SpellCastRotator;
-	
-	
-	
+		
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

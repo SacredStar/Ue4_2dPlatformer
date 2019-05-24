@@ -35,6 +35,7 @@ void UAbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 void UAbilitySystemComponent::CastSpell()
 {
+	//Add 10 to offset of Actor to not spawn in his mesh
 	FVector SpellCastOffset = GetOwner()->GetActorLocation() + FVector(10.f,0.f,0.f);
 	FRotator SpellCastRotator = GetOwner()->GetActorRotation(); 
 	
