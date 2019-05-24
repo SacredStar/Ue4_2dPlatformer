@@ -45,7 +45,7 @@ protected:
 	
 	//The Animation to play while Attacking
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
-	class UPaperFlipbook* AtackAnimation;
+	class UPaperFlipbook* AttackAnimation;
 
 	//The animation to play while SpellCast
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
@@ -101,8 +101,8 @@ public:
 		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bMovementRight;
 	
-	void attack();
-	void castspell();
-	void slide();
+	void Attack();
+	void CastSpell();
+	void Slide();
 
 };

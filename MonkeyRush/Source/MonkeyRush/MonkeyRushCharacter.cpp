@@ -41,7 +41,7 @@ AMonkeyRushCharacter::AMonkeyRushCharacter()
 
 	//arrow1 = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 	//arrow1->SetupAttachment(RootComponent);
-	
+
 
 	// Create an orthographic camera (no perspective) and attach it to the boom
 	SideViewCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SideViewCamera"));
@@ -84,42 +84,46 @@ void AMonkeyRushCharacter::UpdateAnimation()
 
 	// Animation to choose for 
 	UPaperFlipbook* DesiredAnimation;
-		
+
 	//Animation Switching
 	//TODO Add Slide Animation
-	if(GetCharacterMovement()->IsFalling() == true)
+	if (GetCharacterMovement()->IsFalling() == true)
 	{
 		DesiredAnimation = JumpAnimation;
 		//UE_LOG(LogTemp, Display, TEXT("Jumping Animation Reporting!"));
 	}
-	else {
-			if(bAttacking == false)
+	else
+	{
+		if (bAttacking == false)
+		{
+			if (bSpellCasting == false)
 			{
-				if(bSpellCasting == false)
+				if (PlayerSpeedSqr > 0.0f)
 				{
-					if(PlayerSpeedSqr > 0.0f)
-					{
-						DesiredAnimation = RunningAnimation;
-						//UE_LOG(LogTemp, Display, TEXT("Running Animation Reporting!"));
-					}
-					else {
-						DesiredAnimation = IdleAnimation;
-						//UE_LOG(LogTemp, Display, TEXT("Idle Animation Reporting!"));
-					}
+					DesiredAnimation = RunningAnimation;
+					//UE_LOG(LogTemp, Display, TEXT("Running Animation Reporting!"));
 				}
-				else {
-					DesiredAnimation = SpellCastAnimation;
-					//UE_LOG(LogTemp, Display, TEXT("SpellCast Animation Reporting!"));
-				}		
+				else
+				{
+					DesiredAnimation = IdleAnimation;
+					//UE_LOG(LogTemp, Display, TEXT("Idle Animation Reporting!"));
+				}
 			}
-			else {
-				DesiredAnimation = AtackAnimation;
-				//UE_LOG(LogTemp, Display, TEXT("Attack Animation Reporting!"));
-				//Attacking = false;
+			else
+			{
+				DesiredAnimation = SpellCastAnimation;
+				//UE_LOG(LogTemp, Display, TEXT("SpellCast Animation Reporting!"));
 			}
+		}
+		else
+		{
+			DesiredAnimation = AttackAnimation;
+			//UE_LOG(LogTemp, Display, TEXT("Attack Animation Reporting!"));
+			//Attacking = false;
+		}
 	}
 
-	if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
+	if (GetSprite()->GetFlipbook() != DesiredAnimation)
 	{
 		GetSprite()->SetFlipbook(DesiredAnimation);
 	}
@@ -127,8 +131,8 @@ void AMonkeyRushCharacter::UpdateAnimation()
 
 void AMonkeyRushCharacter::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaSeconds);	
-	UpdateCharacter();	
+	Super::Tick(DeltaSeconds);
+	UpdateCharacter();
 }
 
 
@@ -140,11 +144,10 @@ void AMonkeyRushCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, this,&AMonkeyRushCharacter::attack);
-	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::slide);
-	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, this, &AMonkeyRushCharacter::castspell);
+	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, this, &AMonkeyRushCharacter::Attack);
+	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::Slide);
+	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, this, &AMonkeyRushCharacter::CastSpell);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMonkeyRushCharacter::MoveRight);
-
 }
 
 void AMonkeyRushCharacter::MoveRight(float Value)
@@ -160,7 +163,7 @@ void AMonkeyRushCharacter::UpdateCharacter()
 {
 	UpdateAnimation();
 	// Now setup the rotation of the controller based on the direction we are travelling
-	const FVector PlayerVelocity = GetVelocity();	
+	const FVector PlayerVelocity = GetVelocity();
 	float TravelDirection = PlayerVelocity.X;
 	// Set the rotation so that the character faces his direction of travel.
 	if (Controller != nullptr)
@@ -174,16 +177,16 @@ void AMonkeyRushCharacter::UpdateCharacter()
 		else if (TravelDirection > 0.0f)
 		{
 			//UE_LOG(LogTemp, Display, TEXT("Right!"));
-			bMovementRight = true;			
+			bMovementRight = true;
 			Controller->SetControlRotation(FRotator(0.0f, 0.0f, 0.0f));
 		}
 	}
 }
 
-void AMonkeyRushCharacter::castspell()
+void AMonkeyRushCharacter::CastSpell()
 {
 	FTimerDelegate TimerDelegate;
-	//Lambda Function to implementing timer
+	//Lambda Function to  timer
 	TimerDelegate.BindLambda([&]()
 	{
 		bSpellCasting = false;
@@ -191,20 +194,21 @@ void AMonkeyRushCharacter::castspell()
 		GetWorld()->GetTimerManager().ClearTimer(CastSpellTimerHandle);
 	});
 
-	if( bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding == false )
+	if (bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding ==
+		false)
 	{
 		GetCharacterMovement()->DisableMovement();
 		bSpellCasting = true;
 		AbilitySystemComponent->CastSpell();
 		//Timer to StopMovement and Animation changes,when fires set movement to normal and bSpellCast to false to continue Animation's
-		GetWorld()->GetTimerManager().SetTimer(CastSpellTimerHandle,TimerDelegate,0.6f,false);		
+		GetWorld()->GetTimerManager().SetTimer(CastSpellTimerHandle, TimerDelegate, 0.6f, false);
 	}
 }
 
-void AMonkeyRushCharacter::attack()
+void AMonkeyRushCharacter::Attack()
 {
 	FTimerDelegate TimerDelegate;
-	//Lambda Function to implemeting timer
+	//Lambda Function to timer
 	TimerDelegate.BindLambda([&]()
 	{
 		bAttacking = false;
@@ -212,31 +216,26 @@ void AMonkeyRushCharacter::attack()
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
 	});
 
-	if(bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding == false)
+	if (bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding ==
+		false)
 	{
 		GetCharacterMovement()->DisableMovement();
 		//UE_LOG(LogTemp, Warning, TEXT("bAtacking Set True Reporting!"));
 		bAttacking = true;
 		AbilitySystemComponent->Attack();
 		//Timer to Stop Movement and animation changes,when fires set movement to normal and bAttack to false to continue Animation's
-		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle,TimerDelegate,0.6f,false);		
+		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle, TimerDelegate, 0.6f, false);
 	}
 }
 
-void AMonkeyRushCharacter::slide()
+void AMonkeyRushCharacter::Slide()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Slide function Reporting!"));
-	if(bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding == false)
-	{		
+	if (bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding ==
+		false)
+	{
 		bSliding = true;
-		GetCharacterMovement()->DisableMovement();
-		if(bMovementRight == true)
-		{
-			FVector Delta = FVector(1000.f,0.f,0.f);
-			FVector Normal = FVector(0.f,0.f,0.f);
-			FHitResult hit;
-			//SlideAlongSurface(Delta,1.f,Normal,hit,false);
-			bSliding = false;
-		}
+		UE_LOG(LogTemp, Warning, TEXT("%s"), bAttacking)
+		bSliding = false;
 	}
 }
