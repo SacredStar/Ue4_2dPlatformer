@@ -59,20 +59,23 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* IdleAnimation;
 
-	/** Called to choose the correct animation to play based on the character's movement state */
-	void UpdateAnimation();
-
-	/* 				//Movement Functions// 				/*
-	/** Called for side to side input */
-	void MoveRight(float Value);
-
-	void UpdateCharacter();
+	// The animation to play while Slide 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+	class UPaperFlipbook* SlideAnimation;
 
 	/* Handle to manage the timer */
 	FTimerHandle AttackTimerHandle;
 
 	//Handle To manage CastSpell
 	FTimerHandle CastSpellTimerHandle;
+
+	/** Called to choose the correct animation to play based on the character's movement state */
+	void UpdateAnimation();
+
+	/** Called for side to side input */
+	void MoveRight(float Value);
+
+	void UpdateCharacter();
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
@@ -82,6 +85,8 @@ public:
 	AMonkeyRushCharacter();
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
+	/** Returns CameraBoom subobject **/
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
 	//Boolean Stats for Attack
 		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
@@ -89,19 +94,15 @@ public:
 	//Boolean Stats For SpellCast
 		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bSpellCasting = false;
+	//Boolean Stats For Slide
+		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+		bool bSliding = false;
 	//Boolean Stats For movement
 		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bMovementRight;
 	
-
-
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-
 	void attack();
-
 	void castspell();
-
 	void slide();
 
 };

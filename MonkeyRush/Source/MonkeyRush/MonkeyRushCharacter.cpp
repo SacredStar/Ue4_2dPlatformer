@@ -85,7 +85,8 @@ void AMonkeyRushCharacter::UpdateAnimation()
 	// Animation to choose for 
 	UPaperFlipbook* DesiredAnimation;
 		
-	//TODO Jump Animation
+	//Animation Switching
+	//TODO Add Slide Animation
 	if(GetCharacterMovement()->IsFalling() == true)
 	{
 		DesiredAnimation = JumpAnimation;
@@ -157,9 +158,7 @@ void AMonkeyRushCharacter::MoveRight(float Value)
 
 void AMonkeyRushCharacter::UpdateCharacter()
 {
-	// Update animation to match the motion
 	UpdateAnimation();
-
 	// Now setup the rotation of the controller based on the direction we are travelling
 	const FVector PlayerVelocity = GetVelocity();	
 	float TravelDirection = PlayerVelocity.X;
@@ -180,7 +179,7 @@ void AMonkeyRushCharacter::UpdateCharacter()
 		}
 	}
 }
-//TODO : Fix For Not Spawn In Character
+
 void AMonkeyRushCharacter::castspell()
 {
 	FTimerDelegate TimerDelegate;
@@ -192,7 +191,7 @@ void AMonkeyRushCharacter::castspell()
 		GetWorld()->GetTimerManager().ClearTimer(CastSpellTimerHandle);
 	});
 
-	if(bSpellCasting == false && GetCharacterMovement()->IsFalling() == false )
+	if( bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding == false )
 	{
 		GetCharacterMovement()->DisableMovement();
 		bSpellCasting = true;
@@ -213,7 +212,7 @@ void AMonkeyRushCharacter::attack()
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
 	});
 
-	if(bAttacking == false && GetCharacterMovement()->IsFalling() == false)
+	if(bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding == false)
 	{
 		GetCharacterMovement()->DisableMovement();
 		//UE_LOG(LogTemp, Warning, TEXT("bAtacking Set True Reporting!"));
@@ -227,12 +226,17 @@ void AMonkeyRushCharacter::attack()
 void AMonkeyRushCharacter::slide()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Slide function Reporting!"));
-	//FVector Launch_Dir = FVector(4000.f,0.f,0.f);
-	//FHitResult hit;
-	//AMonkeyRushCharacter::SlideAlongSurface(FVector(200.f,0.f,0.f),1.f,FVector(200.f,0.f,0.f),hit,false);
-	/*if(	GetCharacterMovement()-> IsFalling() == true)
-	{
-		GetCharacterMovement()->StopActiveMovement();
-	}*/
-	//GetCharacterMovement()->AddImpulse(FVector(4000.f,0.f,0.f),true);
+	if(bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding == false)
+	{		
+		bSliding = true;
+		GetCharacterMovement()->DisableMovement();
+		if(bMovementRight == true)
+		{
+			FVector Delta = FVector(1000.f,0.f,0.f);
+			FVector Normal = FVector(0.f,0.f,0.f);
+			FHitResult hit;
+			//SlideAlongSurface(Delta,1.f,Normal,hit,false);
+			bSliding = false;
+		}
+	}
 }
