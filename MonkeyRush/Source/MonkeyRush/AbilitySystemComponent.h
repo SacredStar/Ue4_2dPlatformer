@@ -10,11 +10,11 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class MONKEYRUSH_API UAbilitySystemComponent : public UActorComponent
+	class MONKEYRUSH_API UAbilitySystemComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UAbilitySystemComponent();
 
@@ -36,8 +36,8 @@ public:
 
 protected:
 	// Called when the game starts
-	virtual void BeginPlay() override;
-	
+	void BeginPlay() override;
+
 	/*     / For  Spell's    */
 	// Location From where start to Fire
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SpellCasting)
@@ -48,19 +48,18 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SpellCasting)
 	FRotator SpellCastRotator;
-		
-public:	
+
+public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION()
-	void CastSpell ();
+	void CastSpell();
 
 	UFUNCTION()
 	void Attack();
 
 	// Projectile class to spawn.
-    UPROPERTY(EditDefaultsOnly, Category = Projectile)
-    TSubclassOf<class AFireBall> FireBallClass;
-		
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AFireBall> FireBallClass;
 };
