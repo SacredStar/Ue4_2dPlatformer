@@ -10,15 +10,14 @@
 #include "GameFramework/Controller.h"
 #include "Camera/CameraComponent.h"
 #include "AbilitySystemComponent.h"
+#include "MyCharacterMovementComponent.h"
 
 
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
-//////////////////////////////////////////////////////////////////////////
-// AMonkeyRushCharacter
-
-AMonkeyRushCharacter::AMonkeyRushCharacter()
-{
+AMonkeyRushCharacter::AMonkeyRushCharacter(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer.SetDefaultSubobjectClass<UMyCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+{	
 	// Use only Yaw from the controller and ignore the rest of the rotation.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = true;
@@ -135,6 +134,12 @@ void AMonkeyRushCharacter::Tick(float DeltaSeconds)
 	UpdateCharacter();
 }
 
+void AMonkeyRushCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	MovementComponent = Cast<UMyCharacterMovementComponent>(Super::GetMovementComponent());
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -217,7 +222,7 @@ void AMonkeyRushCharacter::StartAttacking()
 	});
 
 	if (bSpellCasting == false && bAttacking == false && 
-		GetCharacterMovement()->IsFalling() == false && bSliding ==	false)
+		MovementComponent->IsFalling() == false && bSliding ==	false)
 	{
 		GetCharacterMovement()->DisableMovement();
 		//UE_LOG(LogTemp, Warning, TEXT("bAtacking Set True Reporting!"));
@@ -231,11 +236,8 @@ void AMonkeyRushCharacter::StartAttacking()
 void AMonkeyRushCharacter::StartSliding()
 {
 	UE_LOG(LogTemp, Warning, TEXT("StartSliding function Reporting!"));
-	if (bSpellCasting == false && bAttacking == false &&
-		GetCharacterMovement()->IsFalling() == false && bSliding == false)
+	if (bSpellCasting == false && bAttacking == false && bSliding == false)
 	{
-		bSliding = true;
-		UE_LOG(LogTemp, Warning, TEXT("%s"), bAttacking)
-		bSliding = false;
+		LaunchCharacter(FVector(1500.f, 0.f, 0.f), true, false);
 	}
 }

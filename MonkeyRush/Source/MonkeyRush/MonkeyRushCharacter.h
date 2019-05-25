@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
 #include "GameFramework/Character.h"
+#include "MyCharacterMovementComponent.h"
 #include "MonkeyRushCharacter.generated.h"
 
 
@@ -23,21 +24,7 @@ class AMonkeyRushCharacter : public APaperCharacter
 {
 	GENERATED_BODY()
 
-	/** Side view camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta=(AllowPrivateAccess="true"))
-	class UCameraComponent* SideViewCameraComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta=(AllowPrivateAccess="true"))
-	class UAbilitySystemComponent* AbilitySystemComponent;
-
-	/** Camera boom positioning the camera beside the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
-	virtual void Tick(float DeltaSeconds) override;
-
 protected:
-
 	/*             //Animations //  */
 	// The animation to play while running around
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
@@ -63,17 +50,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* SlideAnimation;
 
-	/* Handle to manage the timer */
-	FTimerHandle AttackTimerHandle;
-
-	//Handle To manage StartCastingSpell
-	FTimerHandle CastSpellTimerHandle;
-
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
-
-	/** Called for side to side input */
-	void MoveRight(float Value);
 
 	void UpdateCharacter();
 
@@ -81,25 +59,60 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End of APawn interface
 
+private:
+	//Custom Character Movement
+	UMyCharacterMovementComponent* MovementComponent;
+	
+	/** Side view camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class UCameraComponent* SideViewCameraComponent;
+
+	/** Camera boom positioning the camera beside the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class USpringArmComponent* CameraBoom;
+
+	/* Handle to manage the timer */
+	FTimerHandle AttackTimerHandle;
+
+	//Handle To manage StartCastingSpell
+	FTimerHandle CastSpellTimerHandle;
+
+	/** Called for side to side input */
+	void MoveRight(float Value);
+
 public:
-	AMonkeyRushCharacter();
+	//AMonkeyRushCharacter();
+	AMonkeyRushCharacter(const FObjectInitializer& ObjectInitializer);
+
+	UFUNCTION(BlueprintCallable,Category="Movement")
+		FORCEINLINE class UMyCharacterMovementComponent* GetMyMovementComponent() const { return  MovementComponent; }
+
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+		class UAbilitySystemComponent* AbilitySystemComponent;
+
 	//Boolean Stats for StartAttacking
-		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bAttacking = false;
 	//Boolean Stats For SpellCast
-		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bSpellCasting = false;
 	//Boolean Stats For StartSliding
-		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bSliding = false;
 	//Boolean Stats For movement
-		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bMovementRight;
+
+	virtual void Tick(float DeltaSeconds) override;
+
+	virtual void PostInitializeComponents() override;
 	
 	void StartAttacking();
 	void StartCastingSpell();
