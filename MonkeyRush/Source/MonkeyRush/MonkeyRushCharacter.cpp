@@ -86,7 +86,7 @@ void AMonkeyRushCharacter::UpdateAnimation()
 	UPaperFlipbook* DesiredAnimation;
 
 	//Animation Switching
-	//TODO Add Slide Animation
+	//TODO Add StartSliding Animation
 	if (GetCharacterMovement()->IsFalling() == true)
 	{
 		DesiredAnimation = JumpAnimation;
@@ -118,7 +118,7 @@ void AMonkeyRushCharacter::UpdateAnimation()
 		else
 		{
 			DesiredAnimation = AttackAnimation;
-			//UE_LOG(LogTemp, Display, TEXT("Attack Animation Reporting!"));
+			//UE_LOG(LogTemp, Display, TEXT("StartAttacking Animation Reporting!"));
 			//Attacking = false;
 		}
 	}
@@ -144,9 +144,9 @@ void AMonkeyRushCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, this, &AMonkeyRushCharacter::Attack);
-	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::Slide);
-	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, this, &AMonkeyRushCharacter::CastSpell);
+	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, this, &AMonkeyRushCharacter::StartAttacking);
+	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::StartSliding);
+	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, this, &AMonkeyRushCharacter::StartCastingSpell);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMonkeyRushCharacter::MoveRight);
 }
 
@@ -183,7 +183,7 @@ void AMonkeyRushCharacter::UpdateCharacter()
 	}
 }
 
-void AMonkeyRushCharacter::CastSpell()
+void AMonkeyRushCharacter::StartCastingSpell()
 {
 	FTimerDelegate TimerDelegate;
 	//Lambda Function to  timer
@@ -194,8 +194,8 @@ void AMonkeyRushCharacter::CastSpell()
 		GetWorld()->GetTimerManager().ClearTimer(CastSpellTimerHandle);
 	});
 
-	if (bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding ==
-		false)
+	if (bSpellCasting == false && bAttacking == false && 
+		GetCharacterMovement()->IsFalling() == false && bSliding ==	false)
 	{
 		GetCharacterMovement()->DisableMovement();
 		bSpellCasting = true;
@@ -205,7 +205,7 @@ void AMonkeyRushCharacter::CastSpell()
 	}
 }
 
-void AMonkeyRushCharacter::Attack()
+void AMonkeyRushCharacter::StartAttacking()
 {
 	FTimerDelegate TimerDelegate;
 	//Lambda Function to timer
@@ -216,8 +216,8 @@ void AMonkeyRushCharacter::Attack()
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
 	});
 
-	if (bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding ==
-		false)
+	if (bSpellCasting == false && bAttacking == false && 
+		GetCharacterMovement()->IsFalling() == false && bSliding ==	false)
 	{
 		GetCharacterMovement()->DisableMovement();
 		//UE_LOG(LogTemp, Warning, TEXT("bAtacking Set True Reporting!"));
@@ -228,11 +228,11 @@ void AMonkeyRushCharacter::Attack()
 	}
 }
 
-void AMonkeyRushCharacter::Slide()
+void AMonkeyRushCharacter::StartSliding()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Slide function Reporting!"));
-	if (bSpellCasting == false && bAttacking == false && GetCharacterMovement()->IsFalling() == false && bSliding ==
-		false)
+	UE_LOG(LogTemp, Warning, TEXT("StartSliding function Reporting!"));
+	if (bSpellCasting == false && bAttacking == false &&
+		GetCharacterMovement()->IsFalling() == false && bSliding == false)
 	{
 		bSliding = true;
 		UE_LOG(LogTemp, Warning, TEXT("%s"), bAttacking)

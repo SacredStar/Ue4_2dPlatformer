@@ -59,14 +59,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* IdleAnimation;
 
-	// The animation to play while Slide 
+	// The animation to play while StartSliding 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* SlideAnimation;
 
 	/* Handle to manage the timer */
 	FTimerHandle AttackTimerHandle;
 
-	//Handle To manage CastSpell
+	//Handle To manage StartCastingSpell
 	FTimerHandle CastSpellTimerHandle;
 
 	/** Called to choose the correct animation to play based on the character's movement state */
@@ -88,21 +88,21 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
-	//Boolean Stats for Attack
+	//Boolean Stats for StartAttacking
 		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bAttacking = false;
 	//Boolean Stats For SpellCast
 		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bSpellCasting = false;
-	//Boolean Stats For Slide
+	//Boolean Stats For StartSliding
 		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bSliding = false;
 	//Boolean Stats For movement
 		UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bMovementRight;
 	
-	void Attack();
-	void CastSpell();
-	void Slide();
+	void StartAttacking();
+	void StartCastingSpell();
+	void StartSliding();
 
 };
