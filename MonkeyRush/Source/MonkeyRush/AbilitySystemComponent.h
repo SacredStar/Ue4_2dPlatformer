@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "FireBall.h"
+#include "SpellProjectile.h"
 #include "TimerManager.h"
 #include "AbilitySystemComponent.generated.h"
 
@@ -61,5 +61,5 @@ public:
 
 	// Projectile class to spawn.
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-	TSubclassOf<class AFireBall> FireBallClass;
+	TSubclassOf<class ASpellProjectile> SpellClass;
 };

@@ -44,8 +44,8 @@ void UAbilitySystemComponent::CastSpell()
 	SpawnParameters.Owner = GetOwner();
 	SpawnParameters.Instigator = GetOwner()->Instigator;
 
-	//Creating a FireBall
-	AFireBall* FireBall = GetWorld()->SpawnActor<AFireBall>(FireBallClass, SpellCastOffset, SpellCastRotator,
+	//Creating a SpellProjectile
+	ASpellProjectile* SpellProjectile = GetWorld()->SpawnActor<ASpellProjectile>(SpellClass, SpellCastOffset, SpellCastRotator,
 	                                                        SpawnParameters);
 	UE_LOG(LogTemp, Warning, TEXT("Cast Spelling Function Reporting!"));
 }
