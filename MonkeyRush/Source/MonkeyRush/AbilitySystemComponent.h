@@ -19,19 +19,19 @@ public:
 	UAbilitySystemComponent();
 
 	/** Creating a stats for my character  **/
-	UPROPERTY(VisibleAnywhere,Category = Stats)
+	UPROPERTY(BlueprintReadWrite,Category = Stats)
 	int32 Intellect;
-	UPROPERTY(VisibleAnywhere,Category = Stats)
+	UPROPERTY(BlueprintReadWrite,Category = Stats)
 	int32 Winsdom;
-	UPROPERTY(VisibleAnywhere,Category = Stats)
+	UPROPERTY(BlueprintReadWrite,Category = Stats)
 	int32 Strengh;
-	UPROPERTY(VisibleAnywhere,Category = Stats)
+	UPROPERTY(BlueprintReadWrite,Category = Stats)
 	int32 Agility;
 
 	// Inherited Stats
-	UPROPERTY(VisibleAnywhere,Category = Stats)
+	UPROPERTY(BlueprintReadWrite,Category = Stats)
 	int32 Health;
-	UPROPERTY(VisibleAnywhere,Category = Stats)
+	UPROPERTY(BlueprintReadWrite,Category = Stats)
 	int32 Mana;
 
 protected:
