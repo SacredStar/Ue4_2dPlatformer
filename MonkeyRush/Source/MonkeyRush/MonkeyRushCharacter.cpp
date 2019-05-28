@@ -238,6 +238,36 @@ void AMonkeyRushCharacter::StartSliding()
 	UE_LOG(LogTemp, Warning, TEXT("StartSliding function Reporting!"));
 	if (bSpellCasting == false && bAttacking == false && bSliding == false)
 	{
-		LaunchCharacter(FVector(1500.f, 0.f, 0.f), true, false);
+		bSliding = true;
+		FTimerDelegate TimerDelegate;
+		FVector ActorLocation = GetActorLocation();
+		FHitResult HitResult;
+		//Take the direction to Dash
+		if(bMovementRight == true)
+		{
+			ActorLocation.X += DashDisctance;
+		} else {
+			ActorLocation.X -= DashDisctance;
+		}	
+		
+		//Lambda Function: Teleporting our Character to Location if it Hit's Smth see Log File 
+		TimerDelegate.BindLambda([&]()
+		{
+			if (SetActorLocation(ActorLocation, true, &HitResult) == false)
+			{
+				// If the set function returned false something is blocking at that location. 
+				//We can interrogate this result to determine details of this  
+				// @See FHitResult for more information  
+				if (HitResult.GetActor() != nullptr)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Cannot move object to location, blocked by %s"), *HitResult.GetActor()->GetName());
+					//TODO Collision to Enemy
+				}
+			}
+			GetWorld()->GetTimerManager().ClearTimer(DashTimerHandle);
+			bSliding = false;
+		});
+		//TODO Spawn Actor to Smoke Screen his Teleport
+		GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, TimerDelegate, 0.6f, false);
 	}
 }
