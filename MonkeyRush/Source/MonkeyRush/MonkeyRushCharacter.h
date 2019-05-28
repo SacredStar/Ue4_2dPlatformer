@@ -77,6 +77,12 @@ private:
 	//Handle To manage StartCastingSpell
 	FTimerHandle CastSpellTimerHandle;
 
+	/* Handle to manage the timer */
+	FTimerHandle DashTimerHandle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Dash, meta = (AllowPrivateAccess = "true"))
+	float DashDisctance = 250.f;
+
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
@@ -85,7 +91,7 @@ public:
 	AMonkeyRushCharacter(const FObjectInitializer& ObjectInitializer);
 
 	UFUNCTION(BlueprintCallable,Category="Movement")
-		FORCEINLINE class UMyCharacterMovementComponent* GetMyMovementComponent() const { return  MovementComponent; }
+	FORCEINLINE class UMyCharacterMovementComponent* GetMyMovementComponent() const { return  MovementComponent; }
 
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
