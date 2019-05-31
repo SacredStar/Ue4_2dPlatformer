@@ -9,14 +9,6 @@ UAbilitySystemComponent::UAbilitySystemComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	//Setup Stats
-	Intellect = 5;
-	Winsdom = 5;
-	Strengh = 5;
-	Agility = 5;
-	Health = Strengh;
-	Mana = (Intellect * Winsdom);
 }
 
 // Called when the game starts
@@ -45,8 +37,8 @@ void UAbilitySystemComponent::CastSpell()
 	SpawnParameters.Instigator = GetOwner()->Instigator;
 
 	//Creating a SpellProjectile
-	ASpellProjectile* SpellProjectile = GetWorld()->SpawnActor<ASpellProjectile>(SpellClass, SpellCastOffset, SpellCastRotator,
-	                                                        SpawnParameters);
+	ASpellProjectile* SpellProjectile = GetWorld()->SpawnActor<ASpellProjectile>(SpellClass, SpellCastOffset,
+																				 SpellCastRotator, SpawnParameters);
 	UE_LOG(LogTemp, Warning, TEXT("Cast Spelling Function Reporting!"));
 }
 

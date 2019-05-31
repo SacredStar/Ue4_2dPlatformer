@@ -71,6 +71,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
 
+	
 	/* Handle to manage the timer */
 	FTimerHandle AttackTimerHandle;
 
@@ -87,7 +88,7 @@ private:
 	void MoveRight(float Value);
 
 public:
-	//AMonkeyRushCharacter();
+	AMonkeyRushCharacter();
 	AMonkeyRushCharacter(const FObjectInitializer& ObjectInitializer);
 
 	UFUNCTION(BlueprintCallable,Category="Movement")
@@ -99,6 +100,7 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
+	FORCEINLINE class UAbilitySystemComponent* GetAbilitySystemComponent() const { return AbilitySystemComponent; }
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
 		class UAbilitySystemComponent* AbilitySystemComponent;

@@ -15,6 +15,13 @@
 
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
+AMonkeyRushCharacter::AMonkeyRushCharacter()
+{
+	AbilitySystemComponent = nullptr;
+	CameraBoom = nullptr;
+	SideViewCameraComponent = nullptr;
+}
+
 AMonkeyRushCharacter::AMonkeyRushCharacter(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer.SetDefaultSubobjectClass<UMyCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {	
@@ -70,6 +77,10 @@ AMonkeyRushCharacter::AMonkeyRushCharacter(const FObjectInitializer& ObjectIniti
 	// Note: This can cause a little floating when going up inclines; you can choose the tradeoff between better
 	// behavior on the edge of a ledge versus inclines by setting this to true or false
 	GetCharacterMovement()->bUseFlatBaseForFloorChecks = true;
+
+	//Setting Stats for our character 
+	AbilitySystemComponent->Health = 10;
+	AbilitySystemComponent->Mana = 20;
 }
 
 

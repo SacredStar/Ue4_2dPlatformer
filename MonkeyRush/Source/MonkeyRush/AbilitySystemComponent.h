@@ -20,19 +20,19 @@ public:
 
 	/** Creating a stats for my character  **/
 	UPROPERTY(BlueprintReadWrite,Category = Stats)
-	int32 Intellect;
+	int32 Intellect=0;
 	UPROPERTY(BlueprintReadWrite,Category = Stats)
-	int32 Winsdom;
+	int32 Winsdom=0;
 	UPROPERTY(BlueprintReadWrite,Category = Stats)
-	int32 Strengh;
+	int32 Strengh=0;
 	UPROPERTY(BlueprintReadWrite,Category = Stats)
-	int32 Agility;
+	int32 Agility=0;
 
 	// Inherited Stats
 	UPROPERTY(BlueprintReadWrite,Category = Stats)
-	int32 Health;
+	int32 Health = 0;
 	UPROPERTY(BlueprintReadWrite,Category = Stats)
-	int32 Mana;
+	int32 Mana=0;
 
 protected:
 	// Called when the game starts
