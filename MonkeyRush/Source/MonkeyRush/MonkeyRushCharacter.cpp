@@ -161,7 +161,7 @@ void AMonkeyRushCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, this, &AMonkeyRushCharacter::StartAttacking);
-	PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::StartSliding);
+	//PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::StartSliding);
 	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, this, &AMonkeyRushCharacter::StartCastingSpell);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMonkeyRushCharacter::MoveRight);
 }
@@ -206,16 +206,16 @@ void AMonkeyRushCharacter::StartCastingSpell()
 	TimerDelegate.BindLambda([&]()
 	{
 		bSpellCasting = false;
-		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		/*GetCharacterMovement()->SetMovementMode(MOVE_Walking);*/
 		GetWorld()->GetTimerManager().ClearTimer(CastSpellTimerHandle);
 	});
 
 	if (bSpellCasting == false && bAttacking == false && 
-		GetCharacterMovement()->IsFalling() == false && bSliding ==	false)
+		GetCharacterMovement()->IsFalling() == false )
 	{
-		GetCharacterMovement()->DisableMovement();
+		//GetCharacterMovement()->DisableMovement();
 		bSpellCasting = true;
-		AbilitySystemComponent->CastSpell();
+		//AbilitySystemComponent->CastSpell();
 		//Timer to StopMovement and Animation changes,when fires set movement to normal and bSpellCast to false to continue Animation's
 		GetWorld()->GetTimerManager().SetTimer(CastSpellTimerHandle, TimerDelegate, 0.6f, false);
 	}
@@ -228,25 +228,27 @@ void AMonkeyRushCharacter::StartAttacking()
 	TimerDelegate.BindLambda([&]()
 	{
 		bAttacking = false;
-		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		/*GetCharacterMovement()->SetMovementMode(MOVE_Walking);*/
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
 	});
 
 	if (bSpellCasting == false && bAttacking == false && 
-		MovementComponent->IsFalling() == false && bSliding ==	false)
+		MovementComponent->IsFalling() == false )
 	{
-		GetCharacterMovement()->DisableMovement();
-		//UE_LOG(LogTemp, Warning, TEXT("bAtacking Set True Reporting!"));
 		bAttacking = true;
+		/*GetCharacterMovement()->DisableMovement();
+		//UE_LOG(LogTemp, Warning, TEXT("bAtacking Set True Reporting!"));
+		
 		AbilitySystemComponent->Attack();
-		//Timer to Stop Movement and animation changes,when fires set movement to normal and bAttack to false to continue Animation's
+		//Timer to Stop Movement and animation changes,when fires set movement to normal and bAttack to false to continue Animation's*/
 		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle, TimerDelegate, 0.6f, false);
 	}
 }
 
+/*
 void AMonkeyRushCharacter::StartSliding()
 {
-	UE_LOG(LogTemp, Warning, TEXT("StartSliding function Reporting!"));
+	/*UE_LOG(LogTemp, Warning, TEXT("StartSliding function Reporting!"));
 	if (bSpellCasting == false && bAttacking == false && bSliding == false)
 	{
 		bSliding = true;
@@ -281,4 +283,4 @@ void AMonkeyRushCharacter::StartSliding()
 		//TODO Spawn Actor to Smoke Screen his Teleport
 		GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, TimerDelegate, 0.6f, false);
 	}
-}
+}*/

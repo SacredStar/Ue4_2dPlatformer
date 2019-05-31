@@ -112,18 +112,21 @@ public:
 	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bSpellCasting = false;
 	//Boolean Stats For StartSliding
-	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
-		bool bSliding = false;
+	/*UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+		bool bSliding = false;*/
 	//Boolean Stats For movement
-	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = BooleanStats)
 		bool bMovementRight;
 
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void PostInitializeComponents() override;
-	
+
+	UFUNCTION(BlueprintCallable, Category = "Attacking Function's")
 	void StartAttacking();
+
+	UFUNCTION(BlueprintCallable, Category = "Attacking Function's")
 	void StartCastingSpell();
-	void StartSliding();
+	/*void StartSliding();*/
 
 };
