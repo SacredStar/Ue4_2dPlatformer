@@ -108,15 +108,22 @@ void AMonkeyRushCharacter::UpdateAnimation()
 		{
 			if (bSpellCasting == false)
 			{
-				if (PlayerSpeedSqr > 0.0f)
+				if (bSliding == false)
 				{
-					DesiredAnimation = RunningAnimation;
-					//UE_LOG(LogTemp, Display, TEXT("Running Animation Reporting!"));
+					if (PlayerSpeedSqr > 0.0f)
+					{
+						DesiredAnimation = RunningAnimation;
+						//UE_LOG(LogTemp, Display, TEXT("Running Animation Reporting!"));
+					}
+					else
+					{
+						DesiredAnimation = IdleAnimation;
+						//UE_LOG(LogTemp, Display, TEXT("Idle Animation Reporting!"));
+					}
 				}
 				else
 				{
-					DesiredAnimation = IdleAnimation;
-					//UE_LOG(LogTemp, Display, TEXT("Idle Animation Reporting!"));
+					DesiredAnimation = SlideAnimation;
 				}
 			}
 			else
@@ -206,16 +213,14 @@ void AMonkeyRushCharacter::StartCastingSpell()
 	TimerDelegate.BindLambda([&]()
 	{
 		bSpellCasting = false;
-		/*GetCharacterMovement()->SetMovementMode(MOVE_Walking);*/
 		GetWorld()->GetTimerManager().ClearTimer(CastSpellTimerHandle);
 	});
 
-	if (bSpellCasting == false && bAttacking == false && 
+	if (bSpellCasting == false && bAttacking == false && bSliding == false &&
 		GetCharacterMovement()->IsFalling() == false )
 	{
 		//GetCharacterMovement()->DisableMovement();
 		bSpellCasting = true;
-		//AbilitySystemComponent->CastSpell();
 		//Timer to StopMovement and Animation changes,when fires set movement to normal and bSpellCast to false to continue Animation's
 		GetWorld()->GetTimerManager().SetTimer(CastSpellTimerHandle, TimerDelegate, 0.6f, false);
 	}
@@ -228,59 +233,32 @@ void AMonkeyRushCharacter::StartAttacking()
 	TimerDelegate.BindLambda([&]()
 	{
 		bAttacking = false;
-		/*GetCharacterMovement()->SetMovementMode(MOVE_Walking);*/
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
 	});
 
-	if (bSpellCasting == false && bAttacking == false && 
+	if (bSpellCasting == false && bAttacking == false && bSliding == false &&
 		MovementComponent->IsFalling() == false )
 	{
 		bAttacking = true;
-		/*GetCharacterMovement()->DisableMovement();
-		//UE_LOG(LogTemp, Warning, TEXT("bAtacking Set True Reporting!"));
-		
-		AbilitySystemComponent->Attack();
-		//Timer to Stop Movement and animation changes,when fires set movement to normal and bAttack to false to continue Animation's*/
 		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle, TimerDelegate, 0.6f, false);
 	}
 }
 
-/*
+
 void AMonkeyRushCharacter::StartSliding()
 {
-	/*UE_LOG(LogTemp, Warning, TEXT("StartSliding function Reporting!"));
+	UE_LOG(LogTemp, Warning, TEXT("StartSliding function Reporting!"));
 	if (bSpellCasting == false && bAttacking == false && bSliding == false)
 	{
 		bSliding = true;
 		FTimerDelegate TimerDelegate;
-		FVector ActorLocation = GetActorLocation();
-		FHitResult HitResult;
-		//Take the direction to Dash
-		if(bMovementRight == true)
-		{
-			ActorLocation.X += DashDisctance;
-		} else {
-			ActorLocation.X -= DashDisctance;
-		}	
-		
 		//Lambda Function: Teleporting our Character to Location if it Hit's Smth see Log File 
 		TimerDelegate.BindLambda([&]()
 		{
-			if (SetActorLocation(ActorLocation, true, &HitResult) == false)
-			{
-				// If the set function returned false something is blocking at that location. 
-				//We can interrogate this result to determine details of this  
-				// @See FHitResult for more information  
-				if (HitResult.GetActor() != nullptr)
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Cannot move object to location, blocked by %s"), *HitResult.GetActor()->GetName());
-					//TODO Collision to Enemy
-				}
-			}
-			GetWorld()->GetTimerManager().ClearTimer(DashTimerHandle);
 			bSliding = false;
+			GetWorld()->GetTimerManager().ClearTimer(DashTimerHandle);
 		});
-		//TODO Spawn Actor to Smoke Screen his Teleport
+
 		GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, TimerDelegate, 0.6f, false);
 	}
-}*/
+}

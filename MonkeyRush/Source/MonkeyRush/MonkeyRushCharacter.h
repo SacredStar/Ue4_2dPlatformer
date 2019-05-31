@@ -112,8 +112,8 @@ public:
 	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
 		bool bSpellCasting = false;
 	//Boolean Stats For StartSliding
-	/*UPROPERTY(VisibleAnywhere,Category = BooleanStats)
-		bool bSliding = false;*/
+	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
+		bool bSliding = false;
 	//Boolean Stats For movement
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = BooleanStats)
 		bool bMovementRight;
@@ -127,6 +127,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Attacking Function's")
 	void StartCastingSpell();
-	/*void StartSliding();*/
+
+	UFUNCTION(BlueprintCallable, Category = "Attacking Function's")
+	void StartSliding();
 
 };
