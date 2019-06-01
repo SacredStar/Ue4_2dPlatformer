@@ -233,11 +233,11 @@ void AMonkeyRushCharacter::StartAttacking()
 	}
 }
 
-void AMonkeyRushCharacter::StartSliding()
+void amonkeyrushcharacter::startsliding()
 {
-	UE_LOG(LogTemp, Warning, TEXT("StartSliding function Reporting!"));
-	if (bSpellCasting == false && bAttacking == false && bSliding == false)
+	ue_log(logtemp, warning, text("startsliding function reporting!"));
+	if (bspellcasting == false && battacking == false && bsliding == false)
 	{
-		LaunchCharacter(FVector(1500.f, 0.f, 0.f), true, false);
+		launchcharacter(fvector(1500.f, 0.f, 0.f), true, false);
 	}
 }
