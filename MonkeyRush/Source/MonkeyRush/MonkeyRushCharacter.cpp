@@ -9,7 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "Camera/CameraComponent.h"
-#include "AbilitySystemComponent.h"
+//#include "AbilitySystemComponent.h"
 #include "MyCharacterMovementComponent.h"
 
 
@@ -17,7 +17,7 @@ DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
 AMonkeyRushCharacter::AMonkeyRushCharacter()
 {
-	AbilitySystemComponent = nullptr;
+	//AbilitySystemComponent = nullptr;
 	CameraBoom = nullptr;
 	SideViewCameraComponent = nullptr;
 }
@@ -30,7 +30,7 @@ AMonkeyRushCharacter::AMonkeyRushCharacter(const FObjectInitializer& ObjectIniti
 	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
 
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+	//AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 
 	// Set the size of our collision capsule.
 	GetCapsuleComponent()->SetCapsuleHalfHeight(96.0f);
@@ -79,8 +79,8 @@ AMonkeyRushCharacter::AMonkeyRushCharacter(const FObjectInitializer& ObjectIniti
 	GetCharacterMovement()->bUseFlatBaseForFloorChecks = true;
 
 	//Setting Stats for our character 
-	AbilitySystemComponent->Health = 10;
-	AbilitySystemComponent->Mana = 20;
+	//AbilitySystemComponent->Health = 10;
+	//AbilitySystemComponent->Mana = 20;
 }
 
 
@@ -104,39 +104,46 @@ void AMonkeyRushCharacter::UpdateAnimation()
 	}
 	else
 	{
-		if (bAttacking == false)
+		if (bHurt == false)
 		{
-			if (bSpellCasting == false)
+			if (bAttacking == false)
 			{
-				if (bSliding == false)
+				if (bSpellCasting == false)
 				{
-					if (PlayerSpeedSqr > 0.0f)
+					if (bSliding == false)
 					{
-						DesiredAnimation = RunningAnimation;
-						//UE_LOG(LogTemp, Display, TEXT("Running Animation Reporting!"));
+						if (PlayerSpeedSqr > 0.0f)
+						{
+							DesiredAnimation = RunningAnimation;
+							//UE_LOG(LogTemp, Display, TEXT("Running Animation Reporting!"));
+						}
+						else
+						{
+							DesiredAnimation = IdleAnimation;
+							//UE_LOG(LogTemp, Display, TEXT("Idle Animation Reporting!"));
+						}
 					}
 					else
 					{
-						DesiredAnimation = IdleAnimation;
-						//UE_LOG(LogTemp, Display, TEXT("Idle Animation Reporting!"));
+						DesiredAnimation = SlideAnimation;
 					}
 				}
 				else
 				{
-					DesiredAnimation = SlideAnimation;
+					DesiredAnimation = SpellCastAnimation;
+					//UE_LOG(LogTemp, Display, TEXT("SpellCast Animation Reporting!"));
 				}
 			}
 			else
 			{
-				DesiredAnimation = SpellCastAnimation;
-				//UE_LOG(LogTemp, Display, TEXT("SpellCast Animation Reporting!"));
+				DesiredAnimation = AttackAnimation;
+				//UE_LOG(LogTemp, Display, TEXT("StartAttacking Animation Reporting!"));
+				//Attacking = false;
 			}
 		}
 		else
 		{
-			DesiredAnimation = AttackAnimation;
-			//UE_LOG(LogTemp, Display, TEXT("StartAttacking Animation Reporting!"));
-			//Attacking = false;
+			DesiredAnimation = HurtAnimation;
 		}
 	}
 
@@ -167,9 +174,9 @@ void AMonkeyRushCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("AttackButton", IE_Pressed, this, &AMonkeyRushCharacter::StartAttacking);
+	//PlayerInputComponent->BindAction("AttackButton", IE_Pressed, this, &AMonkeyRushCharacter::StartAttacking);
 	//PlayerInputComponent->BindAction("SlideButton", IE_Pressed, this, &AMonkeyRushCharacter::StartSliding);
-	PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, this, &AMonkeyRushCharacter::StartCastingSpell);
+	//PlayerInputComponent->BindAction("SpellCastButton", IE_Pressed, this, &AMonkeyRushCharacter::StartCastingSpell);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMonkeyRushCharacter::MoveRight);
 }
 
@@ -203,62 +210,5 @@ void AMonkeyRushCharacter::UpdateCharacter()
 			bMovementRight = true;
 			Controller->SetControlRotation(FRotator(0.0f, 0.0f, 0.0f));
 		}
-	}
-}
-
-void AMonkeyRushCharacter::StartCastingSpell()
-{
-	FTimerDelegate TimerDelegate;
-	//Lambda Function to  timer
-	TimerDelegate.BindLambda([&]()
-	{
-		bSpellCasting = false;
-		GetWorld()->GetTimerManager().ClearTimer(CastSpellTimerHandle);
-	});
-
-	if (bSpellCasting == false && bAttacking == false && bSliding == false &&
-		GetCharacterMovement()->IsFalling() == false )
-	{
-		//GetCharacterMovement()->DisableMovement();
-		bSpellCasting = true;
-		//Timer to StopMovement and Animation changes,when fires set movement to normal and bSpellCast to false to continue Animation's
-		GetWorld()->GetTimerManager().SetTimer(CastSpellTimerHandle, TimerDelegate, 0.6f, false);
-	}
-}
-
-void AMonkeyRushCharacter::StartAttacking()
-{
-	FTimerDelegate TimerDelegate;
-	//Lambda Function to timer
-	TimerDelegate.BindLambda([&]()
-	{
-		bAttacking = false;
-		GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
-	});
-
-	if (bSpellCasting == false && bAttacking == false && bSliding == false &&
-		MovementComponent->IsFalling() == false )
-	{
-		bAttacking = true;
-		GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle, TimerDelegate, 0.6f, false);
-	}
-}
-
-
-void AMonkeyRushCharacter::StartSliding()
-{
-	UE_LOG(LogTemp, Warning, TEXT("StartSliding function Reporting!"));
-	if (bSpellCasting == false && bAttacking == false && bSliding == false)
-	{
-		bSliding = true;
-		FTimerDelegate TimerDelegate;
-		//Lambda Function: Teleporting our Character to Location if it Hit's Smth see Log File 
-		TimerDelegate.BindLambda([&]()
-		{
-			bSliding = false;
-			GetWorld()->GetTimerManager().ClearTimer(DashTimerHandle);
-		});
-
-		GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, TimerDelegate, 0.6f, false);
 	}
 }

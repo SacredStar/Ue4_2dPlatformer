@@ -26,10 +26,20 @@ class AMonkeyRushCharacter : public APaperCharacter
 
 protected:
 	/*             //Animations //  */
+	
+
+	// The animation to play while idle (standing still)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+	class UPaperFlipbook* IdleAnimation;
+
 	// The animation to play while running around
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* RunningAnimation;
-	
+
+	//The Animation to play while Jumping
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+	class UPaperFlipbook* JumpAnimation;
+
 	//The Animation to play while Attacking
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* AttackAnimation;
@@ -38,17 +48,28 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* SpellCastAnimation;
 
-	//The Animation to play while Jumping
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
-	class UPaperFlipbook* JumpAnimation;
-
-	// The animation to play while idle (standing still)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
-	class UPaperFlipbook* IdleAnimation;
+	class UPaperFlipbook* HurtAnimation;
 
 	// The animation to play while StartSliding 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* SlideAnimation;
+
+	/** Creating a stats for my character  **/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+	int32 Intellect = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+	int32 Winsdom = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+	int32 Strengh = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+	int32 Agility = 0;
+
+	// Inherited Stats
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+	int32 Health = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+	int32 Mana = 0;
 
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
@@ -65,24 +86,18 @@ private:
 	
 	/** Side view camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* SideViewCameraComponent;
+	class UCameraComponent* SideViewCameraComponent;
 
 	/** Camera boom positioning the camera beside the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class USpringArmComponent* CameraBoom;
+	class USpringArmComponent* CameraBoom;
 
 	
 	/* Handle to manage the timer */
-	FTimerHandle AttackTimerHandle;
+	FTimerHandle StatTimerHandle;
 
-	//Handle To manage StartCastingSpell
-	FTimerHandle CastSpellTimerHandle;
-
-	/* Handle to manage the timer */
-	FTimerHandle DashTimerHandle;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Dash, meta = (AllowPrivateAccess = "true"))
-	float DashDisctance = 250.f;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Dash, meta = (AllowPrivateAccess = "true"))
+	//float DashDisctance = 250.f;
 
 	/** Called for side to side input */
 	void MoveRight(float Value);
@@ -100,35 +115,28 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
-	FORCEINLINE class UAbilitySystemComponent* GetAbilitySystemComponent() const { return AbilitySystemComponent; }
+	//FORCEINLINE class UAbilitySystemComponent* GetAbilitySystemComponent() const { return AbilitySystemComponent; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
-		class UAbilitySystemComponent* AbilitySystemComponent;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	//class UAbilitySystemComponent* AbilitySystemComponent;
 
 	//Boolean Stats for StartAttacking
-	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
-		bool bAttacking = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BooleanStats)
+	bool bAttacking = false;
 	//Boolean Stats For SpellCast
-	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
-		bool bSpellCasting = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BooleanStats)
+	bool bSpellCasting = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BooleanStats)
+	bool bHurt = false;
 	//Boolean Stats For StartSliding
-	UPROPERTY(VisibleAnywhere,Category = BooleanStats)
-		bool bSliding = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BooleanStats)
+	bool bSliding = false;
 	//Boolean Stats For movement
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = BooleanStats)
-		bool bMovementRight;
+	bool bMovementRight;
 
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void PostInitializeComponents() override;
-
-	UFUNCTION(BlueprintCallable, Category = "Attacking Function's")
-	void StartAttacking();
-
-	UFUNCTION(BlueprintCallable, Category = "Attacking Function's")
-	void StartCastingSpell();
-
-	UFUNCTION(BlueprintCallable, Category = "Attacking Function's")
-	void StartSliding();
 
 };

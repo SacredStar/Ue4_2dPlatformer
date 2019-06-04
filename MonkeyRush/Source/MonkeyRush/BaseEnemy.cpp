@@ -2,11 +2,11 @@
 
 
 #include "BaseEnemy.h"
-#include "AbilitySystemComponent.h"
+//#include "AbilitySystemComponent.h"
 
 ABaseEnemy::ABaseEnemy()
 {
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
-	AbilitySystemComponent->Health = 10;
-	AbilitySystemComponent->Mana = 10;
+	//AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+	//AbilitySystemComponent->Health = 10;
+	//AbilitySystemComponent->Mana = 10;
 }
